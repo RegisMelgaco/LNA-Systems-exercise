@@ -17,8 +17,7 @@ def get_charged_calls(calls):
     return filter(lambda call: call['from'] != longest_call['from'], calls)
 
 def calc_total_cost(calls):
-    charged_calls = get_charged_calls(calls)
-    print(list(charged_calls))
+    charged_calls = get_charged_calls(list(calls))
     return reduce(lambda acc, call: acc + calc_call_cost(call['time_delta']), charged_calls, 0)
 
 def timestr_to_timeobj(str):
