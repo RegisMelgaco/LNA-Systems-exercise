@@ -9,16 +9,16 @@ def calc_call_cost(call_delta):
     else:
         return (call_delta.seconds // 60 + 1) * 0.05
 
-def find_not_charged_num(calls):
+def get_charged_calls(calls):
     longest_call = reduce(lambda longest_call, call:
             call if call['time_delta'] > longest_call['time_delta'] else longest_call,
             calls
         )
-    return longest_call['from']
+    return filter(lambda call: call['from'] != longest_call['from'], calls)
 
 def calc_total_cost(calls):
-    not_charged_num = find_not_charged_num(calls)
-    charged_calls = filter(lambda call: call['from'] != not_charged_num, calls)
+    charged_calls = get_charged_calls(calls)
+    print(list(charged_calls))
     return reduce(lambda acc, call: acc + calc_call_cost(call['time_delta']), charged_calls, 0)
 
 def timestr_to_timeobj(str):
@@ -44,7 +44,7 @@ def main():
     try:
         with open(input_filepath, newline='\n') as input_file:
             csv_reader = csv.reader(input_file, delimiter = ";")
-            total_cost = calc_total_cost(list(map(treat_input, csv_reader)))
+            total_cost = calc_total_cost(map(treat_input, csv_reader))
             print("%.2f" % total_cost)
 
     except FileNotFoundError as error:
