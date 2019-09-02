@@ -9,12 +9,15 @@ def calc_call_cost(call_delta):
     else:
         return (call_delta.seconds // 60 + 1) * 0.05
 
-def calc_total_cost(calls):
+def find_not_charged_num(calls):
     longest_call = reduce(lambda longest_call, call:
             call if call['time_delta'] > longest_call['time_delta'] else longest_call,
             calls
         )
-    not_charged_num = longest_call['from']
+    return longest_call['from']
+
+def calc_total_cost(calls):
+    not_charged_num = find_not_charged_num(calls)
     charged_calls = filter(lambda call: call['from'] != not_charged_num, calls)
     return reduce(lambda acc, call: acc + calc_call_cost(call['time_delta']), charged_calls, 0)
 
