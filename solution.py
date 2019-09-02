@@ -16,7 +16,7 @@ def calc_total_cost(calls):
         )
     not_charged_num = longest_call['from']
     charged_calls = filter(lambda call: call['from'] != not_charged_num, calls)
-    return sum(map(lambda call: calc_call_cost(call['time_delta']), charged_calls))
+    return reduce(lambda acc, call: acc + calc_call_cost(call['time_delta']), charged_calls, 0)
 
 def timestr_to_timeobj(str):
     splitted_str = map(int, str.split(":"))
