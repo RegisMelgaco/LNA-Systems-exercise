@@ -5,9 +5,9 @@ from functools import reduce
 
 def calc_call_cost(call_delta):
     if (call_delta.seconds > 5 * 60):
-        return ((call_delta.seconds - 300) // 60 + 1) * 0.02 + 0.25
+        return ((call_delta.seconds - 300) // 60 + (1 if call_delta.seconds % 60 != 0 else 1)) * 0.02 + 0.25
     else:
-        return (call_delta.seconds // 60 + 1) * 0.05
+        return (call_delta.seconds // 60 + (1 if call_delta.seconds % 60 != 0 else 1)) * 0.05
 
 def get_charged_calls(calls):
     longest_call = reduce(lambda longest_call, call:
