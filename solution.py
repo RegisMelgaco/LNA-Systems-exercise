@@ -2,6 +2,11 @@ import sys
 import csv
 from datetime import datetime, time
 from functools import reduce
+from typing import NamedTuple
+
+
+class Call(NamedTuple):
+    nome: str
 
 
 # Returns the cost of a call of a given time in seconds. Appling rules 1 and 2.
@@ -13,7 +18,8 @@ def calc_call_cost(call):
     return (first_five_mins * 0.05) + (last_five_mins * 0.02)
 
 
-# Returns all given call, except thoes from the caller with highest call duration. Appling rule 3.
+# Returns all given call, except thoes from the caller
+# with highest call duration. Appling rule 3.
 def get_charged_calls(calls):
     def step(longest_call, call):
         if call['time_delta'] > longest_call['time_delta']:
