@@ -54,18 +54,17 @@ def main():
     try:
         input_filepath = sys.argv[1]
 
+        with open(input_filepath, newline='\n') as input_file:
+            csv_reader = csv.reader(input_file, delimiter=";")
+            total_cost = calc_total_cost(map(format_call_data, csv_reader))
+            print("%.2f" % total_cost)
+
     except IndexError as error:
         raise IndexError(
             '''
             Missing file path. Please execute the script as in the README file.
             '''
         ) from error
-
-    try:
-        with open(input_filepath, newline='\n') as input_file:
-            csv_reader = csv.reader(input_file, delimiter=";")
-            total_cost = calc_total_cost(map(format_call_data, csv_reader))
-            print("%.2f" % total_cost)
 
     except FileNotFoundError as error:
         raise FileNotFoundError(
