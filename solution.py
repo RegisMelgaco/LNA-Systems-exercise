@@ -1,4 +1,5 @@
-import sys, csv
+import sys
+import csv
 from datetime import datetime, time
 from functools import reduce
 
