@@ -1,4 +1,9 @@
+import pytest
+from unittest.mock import MagicMock
+from unittest.mock import patch
+
 from solution import Call, calc_call_cost, get_charged_calls, calc_total_cost
+from solution import timestr_to_timeobj, main
 
 
 calls = [
@@ -65,3 +70,31 @@ class TestCalcTotalCost:
 
     def test_multiple_callers(self):
         assert calc_total_cost(calls) == 0.32
+
+
+class TestTimestrToTimeobj:
+
+    time_obj = timestr_to_timeobj('01:02:03')
+
+    def test_seconds(self):
+        assert self.time_obj.second == 3
+
+    def test_minuts(self):
+        assert self.time_obj.minute == 2
+
+    def test_hour(self):
+        assert self.time_obj.hour == 1
+
+
+class TestMain:
+
+    def test_no_system_arg(self):
+        with pytest.raises(IndexError):
+            main()
+
+    def test_invalid_path(self):
+        import sys
+        sys_argv = ['solution.py', 'dassadadsdasdsa']
+        with patch.object(sys, 'argv', sys_argv):
+            with pytest.raises(FileNotFoundError):
+                main()

@@ -48,24 +48,22 @@ def timestr_to_timeobj(time_str: str) -> datetime:
     return datetime.combine(datetime.today(), time(*splitted_str))
 
 
-# Row: a list output of reader (from csv module) reading the input file.
-# Return: dictionary with -> "time_delta": time of the call in seconds,
-# "from": number of the caller and "to": number to where
-def format_call_data(row: [str]) -> Call:
-    return Call(
-        (timestr_to_timeobj(row[1]) - timestr_to_timeobj(row[0])).seconds,
-        row[2],
-        row[3]
-    )
-
-
 def main():
     try:
+        print(sys.argv)
         input_filepath = sys.argv[1]
 
         with open(input_filepath, newline='\n') as input_file:
             csv_reader = csv.reader(input_file, delimiter=";")
-            total_cost = calc_total_cost(map(format_call_data, csv_reader))
+
+            def input_row_to_call(row: [str]) -> Call:
+                return Call(
+                    (timestr_to_timeobj(row[1]) - timestr_to_timeobj(row[0])).seconds,
+                    row[2],
+                    row[3]
+                )
+
+            total_cost = calc_total_cost(map(input_row_to_call, csv_reader))
             print("%.2f" % total_cost)
 
     except IndexError as error:
