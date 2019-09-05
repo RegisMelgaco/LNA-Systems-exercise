@@ -1,155 +1,79 @@
 import unittest
-from solution import calc_call_cost, calc_total_cost, get_charged_calls
+from solution import calc_call_cost, calc_total_cost, get_charged_calls, Call
 
 
 class SolutionTestCase(unittest.TestCase):
 
+    def setUp(self):
+        self.calls = [
+            Call(0, "1", "2"),
+            Call(1, "1", "2"),
+            Call(1, "2", "1"),
+            Call(59, "1", "2"),
+            Call(60, "1", "2"),
+            Call(61, "1", "2"),
+            Call(5*60, "1", "2"),
+            Call(6*60 - 1, "1", "2"),
+            Call(6*60, "3", "1"),
+            Call(6*60 + 1, "1", "2"),
+        ]
+
     def test_calc_call_cost_less_and_equals_to_5min(self):
-        call = {
-            "time_delta": 0,
-            "from": "1",
-            "to": "2"
-        }
         self.assertEqual(
-            calc_call_cost(call),
+            calc_call_cost(self.calls[0]),
             0
         )
-        call['time_delta'] = 59
         self.assertEqual(
-            calc_call_cost(call),
+            calc_call_cost(self.calls[3]),
             0.05
         )
-        call['time_delta'] = 60
         self.assertEqual(
-            calc_call_cost(60),
+            calc_call_cost(self.calls[4]),
             0.05
         )
-        call['time_delta'] = 61
         self.assertEqual(
-            calc_call_cost(call),
+            calc_call_cost(self.calls[5]),
             0.10
         )
-        call['time_delta'] = 5*60
         self.assertEqual(
-            calc_call_cost(call),
+            calc_call_cost(self.calls[6]),
             0.25
         )
 
     def test_calc_call_cost_more_than_5min(self):
         self.assertEqual(
-            calc_call_cost(5*60+1),
+            calc_call_cost(self.calls[7]),
             0.27
         )
         self.assertEqual(
-            calc_call_cost(6*60-1),
+            calc_call_cost(self.calls[8]),
             0.27
         )
         self.assertEqual(
-            calc_call_cost(6*60),
-            0.27
-        )
-        self.assertEqual(
-            calc_call_cost(6*60+1),
+            calc_call_cost(self.calls[9]),
             0.29
         )
 
     def test_get_charged_calls(self):
-        calls = [
-            {
-                "time_delta": 1,
-                "from": "1",
-                "to": "2"
-            }
-        ]
-        self.assertEqual(len(list(get_charged_calls(calls))), 0)
+        self.assertEqual(len(list(get_charged_calls(self.calls[0:1]))), 0)
 
-        calls = [
-            {
-                "time_delta": 1,
-                "from": "1",
-                "to": "2"
-            },{
-                "time_delta": 1,
-                "from": "1",
-                "to": "2"
-            },
-        ]
-        self.assertEqual(len(list(get_charged_calls(calls))), 0)
+        self.assertEqual(len(list(get_charged_calls(self.calls[0:2]))), 0)
 
-        calls = [
-            {
-                "time_delta": 1,
-                "from": "2",
-                "to": "1"
-            },{
-                "time_delta": 1,
-                "from": "1",
-                "to": "2"
-            },
-        ]
-        self.assertEqual(list(get_charged_calls(calls))[0]["from"], "1")
+        self.assertEqual(
+            list(get_charged_calls(self.calls[1:3]))[0].caller,
+            "2"
+            )
 
-        calls = [
-            {
-                "time_delta": 1,
-                "from": "2",
-                "to": "1"
-            },{
-                "time_delta": 2,
-                "from": "1",
-                "to": "2"
-            },
-        ]
-        self.assertEqual(list(get_charged_calls(calls))[0]["from"], "2")
+        self.assertEqual(
+            list(get_charged_calls([self.calls[2], self.calls[1]]))[0].caller,
+            "1"
+            )
 
     def test_calc_total_cost(self):
-        calls = [
-            {
-                "time_delta": 1,
-                "from": "1",
-                "to": "2"
-            }
-        ]
-        self.assertEqual(calc_total_cost(calls), 0)
+        self.assertEqual(calc_total_cost([]), 0)
+        self.assertEqual(calc_total_cost(self.calls[0:1]), 0)
 
-        calls = [
-            {
-                "time_delta": 1,
-                "from": "1",
-                "to": "2"
-            },{
-                "time_delta": 1,
-                "from": "1",
-                "to": "2"
-            },
-        ]
-        self.assertEqual(calc_total_cost(calls), 0)
-
-        calls = [
-            {
-                "time_delta": 1,
-                "from": "2",
-                "to": "1"
-            },{
-                "time_delta": 1,
-                "from": "1",
-                "to": "2"
-            },
-        ]
-        self.assertEqual(calc_total_cost(calls), 0.05)
-
-        calls = [
-            {
-                "time_delta": 1,
-                "from": "2",
-                "to": "1"
-            },{
-                "time_delta": 2,
-                "from": "1",
-                "to": "2"
-            },
-        ]
-        self.assertEqual(calc_total_cost(calls), 0.05)
+        self.assertEqual(calc_total_cost(self.calls), 0.32)
 
 
 if __name__ == '__main__':
