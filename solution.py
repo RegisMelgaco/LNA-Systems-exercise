@@ -50,7 +50,6 @@ def timestr_to_timeobj(time_str: str) -> datetime:
 
 def main():
     try:
-        print(sys.argv)
         input_filepath = sys.argv[1]
 
         with open(input_filepath, newline='\n') as input_file:
@@ -65,6 +64,8 @@ def main():
 
             total_cost = calc_total_cost(map(input_row_to_call, csv_reader))
             print("%.2f" % total_cost)
+            return total_cost
+            pass
 
     except IndexError as error:
         raise IndexError(
