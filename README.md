@@ -1,5 +1,7 @@
 # How to run this code
 # Notes about this code
+## Linter
+Pylama - https://github.com/klen/pylama
 ## Input file
 ## Implemented rules
 ### Rule 1
