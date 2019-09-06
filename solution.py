@@ -30,7 +30,9 @@ def get_charged_calls(calls: [Call]) -> [Call]:
 
     if len(calls) > 0:
         longest_call = reduce(step, calls)
-        return filter(lambda call: call.caller != longest_call.caller, calls)
+        def step_filter_charged_calls(call):
+            return call.caller != longest_call.caller
+        return filter(step_filter_charged_calls, calls)
     else:
         return []
 
