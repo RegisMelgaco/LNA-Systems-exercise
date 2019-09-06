@@ -1,8 +1,22 @@
 # How to run this code
+# How to run
+## Requirements
+1. Python 3
+2. virtualenv
+## Set enviroment
+Run this three commands
+'''console
+virtualenv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+'''
 # Notes about this code
 ## Linter
 Pylama - https://github.com/klen/pylama
 ## Input file
+```
+time_of_start;time_of_finish;call_from;call_to
+```
 ## Implemented rules
 ### Rule 1
 The first 5 minutes of each call are billed at 5 cents per minute
