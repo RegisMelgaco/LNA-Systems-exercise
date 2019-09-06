@@ -93,25 +93,26 @@ class TestMain:
 
     def test_invalid_path(self):
         import sys
-        sys_argv = ['solution.py', 'foo']
-        sys.argv = MagicMock(return_value=sys_argv)
 
-        with pytest.raises(FileNotFoundError):
-            main()
+        sys_argv = ['solution.py', 'foo.csv']
+
+        with patch.object(sys, 'argv', sys_argv):
+            with pytest.raises(FileNotFoundError):
+                main()
 
     def test_valid_input(self):
         import sys, csv
 
         sys_argv = ['solution.py', 'foo.csv']
+
         csv_reader = [
             ['15:20:04','15:23:49','+351217538222','+351214434422'],
             ['16:43:02','16:50:20','+351217235554','+351329932233'],
             ['17:44:04','17:49:30','+351914374373','+351963433432'],
             ['09:11:30','09:15:22','+351914374373','+351215355312'],
         ]
-
-        sys.argv = MagicMock(return_value=sys_argv)
         csv.reader = MagicMock(return_value=csv_reader)
         
-        with patch("builtins.open", mock_open(read_data="data")):
-            assert main() == 0.67
+        with patch.object(sys, 'argv', sys_argv):
+            with patch("builtins.open", mock_open(read_data="data")):
+                assert main() == 0.67
