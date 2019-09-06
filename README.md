@@ -5,15 +5,23 @@
 2. virtualenv
 ## Set enviroment
 Run this three commands
-'''console
+```console
 virtualenv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-'''
+```
+## Run Code
+```python
+python solution.py input.txt
+```
+## Run Tests
+```python
+pytest tests.py
+```
 # Notes about this code
 ## Linter
 Pylama - https://github.com/klen/pylama
-## Input file
+## Input file format
 ```
 time_of_start;time_of_finish;call_from;call_to
 ```
