@@ -1,4 +1,3 @@
-# How to run this code
 # How to run
 ## Requirements
 1. Python 3
