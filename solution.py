@@ -3,8 +3,8 @@ import csv
 from datetime import datetime, time
 from functools import reduce
 from typing import NamedTuple
-from math import ceil
 from enum import Enum
+from math import ceil
 
 
 class Call(NamedTuple):
