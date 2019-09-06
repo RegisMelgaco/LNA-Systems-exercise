@@ -4,12 +4,26 @@ from datetime import datetime, time
 from functools import reduce
 from typing import NamedTuple
 from math import ceil
+from enum import Enum
 
 
 class Call(NamedTuple):
     duration: int
     caller: str
     callee: str
+
+
+class CallCosts(Enum):
+    BEFORE_THAN_FIVE_MINS = 0.05
+    AFTER_THAN_FIVE_MINS = 0.02
+
+
+class ConsoleMensages(Enum):
+    MISSING_FILE_PATH = ('''
+            Missing file path. Please execute the script as in the README file.
+    ''')
+
+    FILE_NOT_FOUND = "File not found."
 
 
 # Returns the cost of a call of a given time in seconds. Appling rules 1 and 2.
@@ -20,7 +34,10 @@ def calc_call_cost(call: Call) -> float:
     before_five_mins = 5 if charged_mins >= 5 else charged_mins
     after_five_mins = charged_mins - 5 if charged_mins > 5 else 0
 
-    return (before_five_mins * 0.05) + (after_five_mins * 0.02)
+    return (
+        (before_five_mins * CallCosts.BEFORE_THAN_FIVE_MINS) +
+        (after_five_mins * CallCosts.AFTER_THAN_FIVE_MINS)
+        )
 
 
 # Returns all given call, except thoes from the caller
@@ -77,16 +94,10 @@ def main():
             return total_cost
 
     except IndexError as error:
-        raise IndexError(
-            '''
-            Missing file path. Please execute the script as in the README file.
-            '''
-        ) from error
+        raise IndexError(ConsoleMensages.MISSING_FILE_PATH) from error
 
     except FileNotFoundError as error:
-        raise FileNotFoundError(
-            "File not found."
-        ) from error
+        raise FileNotFoundError(ConsoleMensages.FILE_NOT_FOUND) from error
 
 
 if __name__ == '__main__':
