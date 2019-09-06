@@ -8,9 +8,9 @@ from enum import Enum
 
 
 class Call(NamedTuple):
-    duration: int
-    caller: str
-    callee: str
+    duration: int  # duration in seconds
+    caller: str    # the number of who is calling
+    callee: str    # the number who is receving the call
 
 
 class CallCosts(Enum):
@@ -26,8 +26,11 @@ class ConsoleMensages(Enum):
     FILE_NOT_FOUND = "File not found."
 
 
-# Returns the cost of a call of a given time in seconds. Appling rules 1 and 2.
 def calc_call_cost(call: Call) -> float:
+    '''
+    Returns the cost of a call of a given time in seconds.
+    Appling rules 1 and 2.
+    '''
     time = call.duration
     charged_mins = ceil(time / 60)
 
@@ -40,9 +43,11 @@ def calc_call_cost(call: Call) -> float:
         )
 
 
-# Returns all given call, except thoes from the caller
-# with highest call duration. Appling rule 3.
 def get_charged_calls(calls: [Call]) -> [Call]:
+    '''
+    Returns all given call, except thoes from the caller
+    with highest call duration. Appling rule 3.
+    '''
     if len(calls) > 0:
         def keep_first_longest_call(last_longest_call, call):
             if call.duration > last_longest_call.duration:
@@ -59,21 +64,29 @@ def get_charged_calls(calls: [Call]) -> [Call]:
         return []
 
 
-# Returns the sum of the cost of the calls that should be charged.
-# Appling rules 1, 2 and 3.
 def calc_total_cost(calls: [Call]) -> float:
+    '''
+    Returns the sum of the cost of the calls that should be charged.
+    Appling rules 1, 2 and 3.
+    '''
     charged_calls = get_charged_calls(list(calls))
     calls_cost = map(calc_call_cost, charged_calls)
     return sum(calls_cost)
 
 
-# Converts a time(format HH:MM:SS) to a datetime object(datetime module).
 def parse_timestr(time_str: str) -> datetime:
+    '''
+    Converts a time(format HH:MM:SS) to a datetime object(datetime module).
+    '''
     splitted_str = map(int, time_str.split(":"))
     return datetime.combine(datetime.today(), time(*splitted_str))
 
 
 def main():
+    '''
+    Handle running this script via terminal.
+    This script should be could with the file path.
+    '''
     try:
         input_filepath = sys.argv[1]
 
