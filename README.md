@@ -10,11 +10,11 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 ## Run Code
-```python
+```console
 python solution.py input.txt
 ```
 ## Run Tests
-```python
+```console
 pytest tests.py
 ```
 # Notes about this code
